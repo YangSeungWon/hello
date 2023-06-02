@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OINK-Mockup</title>
+    <style>
+        body {
+            background-image: url('images/0-init.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function setBlur(blurAmount) {
+            var blurStyle = 'blur(' + blurAmount + 'px)';
+            document.body.style.backdropFilter = blurStyle;
+        }
+
+        let state = '0-init';
+
+        function check(x, y, x0, x1, y0, y1) {
+            return (x > x0 && x < x1 && y > y0 && y < y1)
+        }
+
+        function checkThen(x, y, x0, x1, y0, y1, then) {
+            if (check(x, y, x0, x1, y0, y1)) {
+                changeBackgroundImage(then);
+            }
+        }
+
+        function changeBackgroundImage(go) {
+            const body = document.querySelector('body');
+
+            if (go == '3-set-chickenking'
+                || go == '4-side-chickenking'
+                || go == '5-drink-chickenking') {
+                    setBlur(0.5);
+                    setTimeout(function() {
+                        setBlur(1.5);
+                    }, 100);
+                    setTimeout(function() {
+                        setBlur(2.5);
+                    }, 200);
+                    setTimeout(function() {
+                        body.style.backgroundImage = `url('images/${go}.png')`;
+                    }, 250);
+                    setTimeout(function() {
+                        setBlur(1.5);
+                    }, 300);
+                    setTimeout(function() {
+                        setBlur(0.5);
+                    }, 350);
+                    setTimeout(function() {
+                        setBlur(0);
+                        state = go;
+                    }, 450);
+                } else {
+                    body.style.backgroundImage = `url('images/${go}.png')`;
+                    state = go
+                }
+
+        }
+        
+        document.addEventListener('click', function(event) {
+            const x = event.clientX / window.innerWidth;
+            const y = event.clientY / (window.innerWidth*4/3);
+            console.log(x,y)
+            
+            switch (state) {
+                case '0-init':
+                    checkThen(x, y, 0.0, 1.0, 0.0, 1.0, '1-membership');
+                    break;
+                case '1-membership':
+                    checkThen(x, y, 0.1, 0.5, 0.8, 1.0, '2-menu1');
+                    break;
+                case '2-menu2':
+                    checkThen(x, y, 0.5, 0.8, 0.4, 0.6, '3-set-chickenking');
+
+                    checkThen(x, y, 0.0, 0.25, 0.1, 0.18, '2-menu1');
+                    // checkThen(x, y, 0.25, 0.5, 0.1, 0.18, '2-menu2');
+                    checkThen(x, y, 0.5, 0.75, 0.1, 0.18, '2-menu3');
+                    checkThen(x, y, 0.75, 1.0, 0.1, 0.18, '2-menu4');
+                    checkThen(x, y, 0.0, 0.25, 0.18, 0.26, '2-menu5');
+                    checkThen(x, y, 0.25, 0.5, 0.18, 0.26, '2-menu6');
+                    checkThen(x, y, 0.5, 0.75, 0.18, 0.26, '2-menu7');
+                    checkThen(x, y, 0.75, 1.0, 0.18, 0.26, '2-menu8');
+                    break;
+                case '2-menu1':
+                case '2-menu3':
+                case '2-menu4':
+                case '2-menu5':
+                case '2-menu6':
+                case '2-menu7':
+                case '2-menu8':
+                    checkThen(x, y, 0.0, 0.25, 0.1, 0.18, '2-menu1');
+                    checkThen(x, y, 0.25, 0.5, 0.1, 0.18, '2-menu2');
+                    checkThen(x, y, 0.5, 0.75, 0.1, 0.18, '2-menu3');
+                    checkThen(x, y, 0.75, 1.0, 0.1, 0.18, '2-menu4');
+                    checkThen(x, y, 0.0, 0.25, 0.18, 0.26, '2-menu5');
+                    checkThen(x, y, 0.25, 0.5, 0.18, 0.26, '2-menu6');
+                    checkThen(x, y, 0.5, 0.75, 0.18, 0.26, '2-menu7');
+                    checkThen(x, y, 0.75, 1.0, 0.18, 0.26, '2-menu8');
+                    break;
+                case '3-set-chickenking':
+                    checkThen(x, y, 0.1, 0.3, 0.4, 0.6, '3-set-chickenking-checked');
+                    break;
+                case '3-set-chickenking-checked':
+                    checkThen(x, y, 0.1, 0.9, 0.7, 0.9, '4-side-chickenking');
+                    break;
+                case '4-side-chickenking':
+                    checkThen(x, y, 0.2, 0.5, 0.4, 0.6, '4-side-chickenking-checked');
+                    break;
+                case '4-side-chickenking-checked':
+                    checkThen(x, y, 0.5, 0.8, 0.8, 1.0, '5-drink-chickenking');
+                    break;
+                case '5-drink-chickenking':
+                    checkThen(x, y, 0.7, 1.0, 0.1, 0.3, '5-drink-chickenking-checked');
+                    break;
+                case '5-drink-chickenking-checked':
+                    checkThen(x, y, 0.5, 0.8, 0.8, 1.0, '6-confirm');
+                    break;
+                case '6-confirm':
+                    checkThen(x, y, 0.1, 0.9, 0.45, 0.75, '7-returnmain');
+                    break;
+                case '7-returnmain':
+                    checkThen(x, y, 0.5, 1.0, 0.9, 1.0, '8-ad');
+                    break;
+                case '8-ad':
+                    checkThen(x, y, 0.1, 0.5, 0.7, 0.9, '9-where');
+                    break;
+                case '9-where':
+                    checkThen(x, y, 0.5, 0.9, 0.4, 0.6, '9-where-checked');
+                    break;
+                case '9-where-checked':
+                    checkThen(x, y, 0.1, 0.9, 0.5, 0.7, '97-almostpay');
+                    break;
+                case '97-almostpay':
+                    checkThen(x, y, 0.1, 0.9, 0.8, 1.0, '98-check');
+                    break;
+                case '98-check':
+                    checkThen(x, y, 0.1, 0.9, 0.5, 0.7, '99-pay');
+                    break;
+                case '99-pay':
+                    checkThen(x, y, 0.0, 1.0, 0.0, 1.0, 'end');
+                    break;
+                case 'end':
+                    checkThen(x, y, 0.0, 1.0, 0.0, 1.0, '0-init');
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
